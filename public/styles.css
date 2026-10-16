@@ -1,0 +1,262 @@
+:root {
+  --papel: #eef3ef;
+  --ficha: #ffffff;
+  --tinta: #17322b;
+  --tinta-suave: #4e6a61;
+  --linha: #c5d4cb;
+  --acao: #1f5fa8;
+  --acao-texto: #ffffff;
+  --erro: #a3271f;
+  --fonte-numeros: 'Bahnschrift', 'DIN Alternate', 'DIN 2014', 'Roboto Condensed', 'Arial Narrow', sans-serif;
+  --fonte-texto: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papel: #0f1714;
+    --ficha: #16211d;
+    --tinta: #e2ece6;
+    --tinta-suave: #9db3aa;
+    --linha: #2c3d36;
+    --acao: #7fb0ea;
+    --acao-texto: #0f1714;
+    --erro: #f08a80;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font: 1rem/1.5 var(--fonte-texto);
+}
+
+h1,
+h2 {
+  font-family: var(--fonte-numeros);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 1.5rem;
+  border-bottom: 2px solid var(--tinta);
+}
+
+.contador {
+  margin: 0;
+  color: var(--tinta-suave);
+  font-family: var(--fonte-numeros);
+  font-variant-numeric: tabular-nums;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: minmax(17rem, 22rem) 1fr;
+  gap: 2.5rem;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+  align-items: start;
+}
+
+.ficha {
+  position: sticky;
+  top: 1.5rem;
+  background: var(--ficha);
+  border: 1px solid var(--linha);
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.campo {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--linha);
+  border-bottom: 2px solid var(--tinta-suave);
+  border-radius: 4px 4px 0 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font: inherit;
+}
+
+#cpf {
+  font-family: var(--fonte-numeros);
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+input[readonly] {
+  color: var(--tinta-suave);
+  border-bottom-style: dashed;
+}
+
+input[aria-invalid='true'] {
+  border-bottom-color: var(--erro);
+}
+
+.erro {
+  min-height: 1.25rem;
+  margin: 0.25rem 0 0;
+  color: var(--erro);
+  font-size: 0.875rem;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+button {
+  padding: 0.625rem 1rem;
+  border: 2px solid var(--acao);
+  border-radius: 4px;
+  background: var(--acao);
+  color: var(--acao-texto);
+  font: 600 0.9375rem var(--fonte-texto);
+  cursor: pointer;
+}
+
+button.secundario {
+  background: transparent;
+  color: var(--acao);
+}
+
+button.perigo {
+  border-color: var(--erro);
+  background: transparent;
+  color: var(--erro);
+}
+
+:focus-visible {
+  outline: 3px solid var(--acao);
+  outline-offset: 2px;
+}
+
+.aviso {
+  min-height: 1.5rem;
+  margin: 1rem 0 0;
+  color: var(--tinta-suave);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--linha);
+}
+
+.pessoa {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'dados idade'
+    'botoes botoes';
+  gap: 0.75rem 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--linha);
+}
+
+.pessoa-dados {
+  grid-area: dados;
+  min-width: 0;
+}
+
+.pessoa-nome {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.pessoa-info {
+  margin: 0.125rem 0 0;
+  color: var(--tinta-suave);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pessoa-idade {
+  grid-area: idade;
+  margin: 0;
+  text-align: right;
+  font-family: var(--fonte-numeros);
+  line-height: 1;
+}
+
+.pessoa-idade strong {
+  display: block;
+  font-size: 2.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.pessoa-idade span {
+  color: var(--tinta-suave);
+  font-size: 0.875rem;
+}
+
+.pessoa-botoes {
+  grid-area: botoes;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pessoa-botoes button {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.vazio {
+  color: var(--tinta-suave);
+  max-width: 36rem;
+}
+
+@media (max-width: 760px) {
+  .grade {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .ficha {
+    position: static;
+  }
+}

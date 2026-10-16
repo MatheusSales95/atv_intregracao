@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  qualidade:
+    name: Formatação, análise estática e testes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Formatação (Prettier)
+        run: npm run format:check
+
+      - name: Análise estática (ESLint)
+        run: npm run lint
+
+      - name: Testes unitários
+        run: npm run test:unit
+
+      - name: Testes de integração
+        run: npm run test:integration
+
+      - name: Cobertura
+        run: npm run test:coverage
+
+  imagem:
+    name: Imagem Docker
+    needs: qualidade
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Construir imagem
+        run: docker build -t cadastro-pessoas:ci .
+
+      - name: Testar a imagem rodando
+        run: |
+          docker run -d --name app -p 3000:3000 cadastro-pessoas:ci
+          for tentativa in $(seq 1 15); do
+            if curl -fs http://localhost:3000/health; then exit 0; fi
+            sleep 1
+          done
+          docker logs app
+          exit 1
+
+      - name: Publicar no GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          IMAGEM="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker tag cadastro-pessoas:ci "$IMAGEM:latest"
+          docker tag cadastro-pessoas:ci "$IMAGEM:${GITHUB_SHA::7}"
+          docker push "$IMAGEM:latest"
+          docker push "$IMAGEM:${GITHUB_SHA::7}"

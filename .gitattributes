@@ -1,0 +1,3 @@
+# Mantém LF no repositório e na cópia local, inclusive no Windows,
+# para o Prettier não acusar diferença de fim de linha.
+* text=auto eol=lf
